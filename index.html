@@ -11,13 +11,19 @@
 </head>
 <body>
     <header>
-        <h2 id="clock" class="default-box digital">00:00:00</h2>
-        <h2 id="mines-left" class="default-box digital">78 (11)</h2> <!-- [total mines] ([mines on this level]) -->
-        <div class="spacer" style="--width: 2rem;"></div>
-        <button id="install-button" class="hidden default-box" aria-label="Install PWA">Download</button>
-        <button onclick="toggleSettings()" id="settings-btn" aria-label="Settings">
-            <img src="/icons/settings.svg" alt="Settings" width="36" height="36" />
-        </button>
+        <div class="flex" style="--direction: row; --gap: 1rem;">
+            <h2 id="clock" class="default-box digital">00:00:00</h2>
+            <h2 id="mines-left" class="default-box digital">78 (11)</h2> <!-- [total mines] ([mines on this level]) -->
+        </div>
+
+        <div class="flex" style="--direction: row; --gap: 1rem;">
+            <button id="install-button" class="hidden default-box" aria-label="Install PWA">
+                <img src="/icons/download.svg" alt="Download" width="20" height="20" />
+            </button>
+            <button onclick="toggleSettings()" id="settings-btn" aria-label="Settings">
+                <img src="/icons/settings.svg" alt="Settings" width="36" height="36" />
+            </button>
+        </div>
     </header>
 
     <main class="board default-box" style="--padding: 0; --column-count: 11;">
@@ -27,25 +33,27 @@
     </main>
 
     <footer>
-        <div class="default-box flag-toggle" style="--padding: 0;">
-            <input type="radio" name="flag-toggle" id="flag-toggle-mine" checked>
-            <label for="flag-toggle-mine">
-                <img src="/icons/mine.svg" alt="Mine first" width="36" height="36" />
-            </label>
-            <input type="radio" name="flag-toggle" id="flag-toggle-flag">
-            <label for="flag-toggle-flag">
-                <img src="/icons/flag.svg" alt="Flag first" width="36" height="36" />
-            </label>
+        <div class="spacer"></div>
+
+        <div class="flex" style="--direction: row; --gap: 1rem;">
+            <div class="default-box flag-toggle" style="--padding: 0;">
+                <input type="radio" name="flag-toggle" id="flag-toggle-mine" checked>
+                <label for="flag-toggle-mine">
+                    <img src="/icons/mine.svg" alt="Mine first" width="36" height="36" />
+                </label>
+                <input type="radio" name="flag-toggle" id="flag-toggle-flag">
+                <label for="flag-toggle-flag">
+                    <img src="/icons/flag.svg" alt="Flag first" width="36" height="36" />
+                </label>
+            </div>
+
+            <div class="default-box layer-swap" style="--padding: 0;">
+                <button id="go-up-btn" class="layer-button" onclick="goUp()">^</button>
+                <button id="go-down-btn" class="layer-button" onclick="goDown()">v</button>
+            </div>
+            
+            <h2 id="current-layer" class="default-box digital" style="--digital-color: lightgray;">2/5</h2> <!-- [current layer] / [total layers] -->
         </div>
-
-        <div class="spacer" style="--width: 2rem;"></div>
-
-        <div class="default-box layer-swap" style="--padding: 0;">
-            <button id="go-up-btn" onclick="goUp()">^</button>
-            <button id="go-down-btn" onclick="goDown()">v</button>
-        </div>
-
-        <h2 id="current-layer" class="default-box digital" style="--digital-color: lightgray;">2/5</h2> <!-- [current layer] / [total layers] -->
     </footer>
 
     <script src="/app.js?v=0.2"></script>

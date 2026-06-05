@@ -16,6 +16,7 @@
     --tiny-info-opacity: .8;
 
     --body-padding: 2rem;
+    --board-width: min(100vw - var(--body-padding) * 2, 100vh - (var(--body-padding) * 2 + 12rem));
 }
 
 * {
@@ -34,7 +35,6 @@ body {
 
 .board {
     --column-count: 11;
-    --board-width: min(100vw - var(--body-padding), 100vh - (var(--body-padding) * 2 + 12rem));
     --tile-width: calc(var(--board-width) / var(--column-count));
 
     aspect-ratio: 1;
@@ -162,6 +162,9 @@ header {
     gap: 1rem;
     align-items: center;
     margin-bottom: var(--body-padding);
+    justify-content: space-between;
+    width: 100%;
+    max-width: var(--board-width);
 }
 
 footer {
@@ -171,11 +174,15 @@ footer {
     flex-direction: row;
     gap: 1rem;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: var(--board-width);
 }
 
 h2 {
     width: fit-content;
     margin: 0;
+    font-size: 1.2rem;
 }
 
 .default-box {
@@ -194,6 +201,18 @@ h2 {
     font-family: "DS-Digital", monospace, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: var(--digital-color-light);
     text-shadow: 0 0 10px var(--digital-color-light), 0 0 20px var(--digital-color), 0 0 40px var(--digital-color), 0 0 70px var(--digital-color);
+    white-space: nowrap;
+}
+
+.flex {
+    --direction: row;
+    --gap: 0;
+
+    display: flex;
+    flex-direction: var(--direction);
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap);
 }
 
 .spacer {
@@ -201,6 +220,11 @@ h2 {
     --height: 0;
     width: var(--width);
     height: var(--height);
+}
+
+.layer-button {
+    touch-action: manipulation;
+    color: #ecf0f1;
 }
 
 #install-button {
