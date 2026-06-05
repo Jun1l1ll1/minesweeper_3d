@@ -185,6 +185,15 @@ h2 {
     font-size: 1.2rem;
 }
 
+#settings-container {
+    z-index: 10;
+    width: calc(var(--board-width) + 1.5rem);
+    border-radius: 8px;
+    background: #1C1C1C;
+    border: 1px solid #2D2D2D;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
 .default-box {
     --padding: .5rem .75rem;
 

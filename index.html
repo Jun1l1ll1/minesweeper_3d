@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="/styles.css?v=0.2" />
 </head>
 <body>
+    <dialog id="settings-container">
+        <p>Heii</p>
+        <button class="default-box" commandfor="settings-container" command="close">Close</button>
+    </dialog>
+
     <header>
         <div class="flex" style="--direction: row; --gap: 1rem;">
             <h2 id="clock" class="default-box digital">00:00:00</h2>
@@ -20,7 +25,7 @@
             <button id="install-button" class="hidden default-box" aria-label="Install PWA">
                 <img src="/icons/download.svg" alt="Download" width="20" height="20" />
             </button>
-            <button onclick="toggleSettings()" id="settings-btn" aria-label="Settings">
+            <button commandfor="settings-container" command="show-modal" id="settings-btn" aria-label="Settings">
                 <img src="/icons/settings.svg" alt="Settings" width="36" height="36" />
             </button>
         </div>

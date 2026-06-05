@@ -1,6 +1,7 @@
 // App UI elements used by the PWA install flow and status display
 const installNotice = document.getElementById('installNotice');
 const installButton = document.getElementById('install-button');
+const settingsDialog = document.getElementById('settings-container');
 const refreshButton = document.getElementById('refreshButton');
 const statusText = document.getElementById('status');
 let deferredPrompt;
