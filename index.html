@@ -10,9 +10,54 @@
     <link rel="stylesheet" href="/styles.css?v=0.3" />
 </head>
 <body>
-    <dialog id="settings-container">
-        <p>Heii</p>
-        <button class="default-box" commandfor="settings-container" command="close">Close</button>
+    <dialog id="settings-dialog">
+
+        <div class="settings-container">
+            <fieldset>
+                <legend>Difficulty</legend>
+                <div class="settings-item">
+                    <span>Bomb amount:</span>
+                    <input type="number" name="bomb-amount-inp" id="bomb-amount-inp" value="5" />
+                </div>
+                <div class="settings-item">
+                    <span>Lives:</span>
+                    <input type="number" name="lives-inp" id="lives-inp" value="3" />
+                </div>
+                <div class="settings-item">
+                    <input type="checkbox" name="bombs-on-layer-chbx" id="bombs-on-layer-chbx" checked />
+                    <label for="bombs-on-layer-chbx">Show bomb amount on layer</label>
+                </div>
+            </fieldset>
+    
+            <fieldset>
+                <legend>Size</legend>
+                <div class="settings-item">
+                    <span>Width:</span>
+                    <input type="number" name="board-width-inp" id="board-width-inp" value="5" />
+                </div>
+                <div class="settings-item">
+                    <span>Height:</span>
+                    <input type="text" name="board-height-inp" id="board-height-inp" value="Same as width" disabled />
+                </div>
+                <div class="settings-item">
+                    <span>Layers:</span>
+                    <input type="number" name="board-layers-inp" id="board-layers-inp" value="3" />
+                </div>
+            </fieldset>
+    
+            <fieldset>
+                <legend>Colors</legend>
+                <!-- TODO -->
+            </fieldset>
+    
+            <fieldset>
+                <legend>Other</legend>
+                <button class="default-box">Start new game</button>
+            </fieldset>
+        </div>
+
+        <div class="spacer" style="--height: 1rem;"></div>
+        <button class="default-box" commandfor="settings-dialog" command="close">Close</button>
     </dialog>
 
     <header>
@@ -25,7 +70,7 @@
             <button id="install-button" class="hidden default-box" aria-label="Install PWA">
                 <img src="/icons/download.svg" alt="Download" width="20" height="20" />
             </button>
-            <button commandfor="settings-container" command="show-modal" id="settings-btn" aria-label="Settings">
+            <button commandfor="settings-dialog" command="show-modal" id="settings-btn" aria-label="Settings">
                 <img src="/icons/settings.svg" alt="Settings" width="36" height="36" />
             </button>
         </div>
