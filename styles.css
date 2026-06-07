@@ -140,7 +140,9 @@ body {
         }
 
         &.ground {
-            pointer-events: none; /* Disable interaction */
+            &:has(> .tile-number:empty), &:has(.mine) { /* Disable interaction if tile is empty or has an open mine */
+                pointer-events: none; 
+            }
             background-color: var(--board-ground-color);
             color: var(--ground-text-color);
 

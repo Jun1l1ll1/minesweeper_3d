@@ -83,12 +83,24 @@ function coordinatesToIndex(x, y) {
 }
 
 function handleTileClick(index) {
-    const mineToggleRadio = document.getElementById('flag-toggle-mine');
-    if (mineToggleRadio && mineToggleRadio.checked) {
-        mineGrass(index);
+    
+    if (isTileOpen(currentLayer, index)) {
+        const tile = document.getElementById(`tile-number-${index}`);
+        if (!tile) return;
+        const tileNumber = parseInt(tile.innerText);
+        console.log(getAdjecentKnownBombs(index), tileNumber);
+        if (tileNumber == NaN) return;
+
+        if (getAdjecentKnownBombs(index) >= tileNumber) openAdjecent(currentLayer, index);
     } else {
-        placeFlag(index);
+        const mineToggleRadio = document.getElementById('flag-toggle-mine');
+        if (mineToggleRadio && mineToggleRadio.checked) {
+            mineGrass(index);
+        } else {
+            placeFlag(index);
+        }
     }
+
 }
 
 function handleTileRightClick(index, event) {
@@ -105,6 +117,7 @@ function handleTileRightClick(index, event) {
 }
 
 function placeFlag(index) {
+    if (isTileOpen(currentLayer, index)) return // Do nothing if it's already open
     const tileNumber = document.getElementById(`tile-number-${index}`);
     if (!tileNumber) return;
 
@@ -187,6 +200,34 @@ function openAdjecent(layer, index) {
     }
 }
 
+function getAdjecentKnownBombs(index, layer = currentLayer) {
+    const { x, y } = indexToCoordinates(index);
+
+    let adjecentKnownBombs = 0;
+
+    // Go through each tile around
+    let nl = 0, nx = 0, ny = 0, ni = 0;
+    for (let offsetZ = -1; offsetZ <= 1; offsetZ++) {
+        nl = layer + offsetZ;
+        if (nl < 1 || nl > totalLayers) continue; // Skip invalid layers
+
+        for (let offsetX = -1; offsetX <= 1; offsetX++) {
+            nx = x + offsetX;
+            if (nx < 0 || nx >= boardWidth) continue; // Skip invalid tiles
+
+            for (let offsetY = -1; offsetY <= 1; offsetY++) {
+                ny = y + offsetY;
+                if (ny < 0 || ny >= boardWidth) continue; // Skip invalid tiles
+
+                ni = coordinatesToIndex(nx, ny);
+                if (flags.layer[nl - 1].includes(ni) || (isTileOpen(nl, ni) && isTileBomb(nl, ni))) adjecentKnownBombs++;
+            }
+        }
+    }
+
+    return adjecentKnownBombs;
+}
+
 function getTileValue(layer, index) {
     const { x, y } = indexToCoordinates(index);
     return getTileValueCords(layer, x, y);
@@ -224,6 +265,11 @@ function isTileOpen(layer, index) {
 function isTileFlagged(layer, index) {
     if (layer < 1 || layer > totalLayers) return false; // Invalid layer
     return flags.layer[layer - 1].includes(index);
+}
+
+function isTileBomb(layer, index) {
+    if (layer < 1 || layer > totalLayers) return false; // Invalid layer
+    return getTileValue(layer, index) >= 100;
 }
 
 function setupBoard() {
