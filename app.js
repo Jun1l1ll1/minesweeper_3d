@@ -4,6 +4,7 @@ const installButton = document.getElementById('install-button');
 const settingsDialog = document.getElementById('settings-container');
 const refreshButton = document.getElementById('refreshButton');
 const statusText = document.getElementById('status');
+
 let deferredPrompt;
 let boardScale = 1;
 let initialPinchDistance = null;

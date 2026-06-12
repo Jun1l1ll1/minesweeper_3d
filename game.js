@@ -1,26 +1,102 @@
-const totalLayers = 3;
+
+let settings = {
+    difficulty: {
+        bombAmount: {
+            value: 4,
+            default: 4,
+            element: document.getElementById('bomb-amount-inp')
+        },
+        lives: { //TODO: Link this up and add death
+            value: 3,
+            default: 3,
+            element: document.getElementById('lives-inp')
+        },
+        showLayerBombAmount: { //TODO: Use this
+            value: true,
+            element: document.getElementById('bombs-on-layer-chbx')
+        }
+    },
+    size: {
+        width: {
+            value: 5,
+            default: 5,
+            element: document.getElementById('board-width-inp')
+        },
+        height: {
+            value: 5,
+            default: 5,
+            element: document.getElementById('board-height-inp')
+        },
+        layers: {
+            value: 3,
+            default: 3,
+            element: document.getElementById('board-layers-inp')
+        }
+    },
+    colors: {
+        grass: {
+            value: '#306d53',
+            default: '#306d53',
+            element: document.getElementById('color-grass-inp')
+        },
+        grassTileing: {
+            value: '#171b45',
+            default: '#171b45',
+            element: document.getElementById('tileing-color-grass-inp')
+        },
+        grassTileingOpacity: {
+            value: 20,
+            default: 20,
+            element: document.getElementById('tileing-opacity-grass-inp')
+        },
+        grassText: {
+            value: '#ecf0f1',
+            default: '#ecf0f1',
+            element: document.getElementById('sub-color-grass-inp')
+        },
+        ground: {
+            value: '#c9ad80',
+            default: '#c9ad80',
+            element: document.getElementById('color-ground-inp')
+        },
+        groundTileing: {
+            value: '#441745',
+            default: '#441745',
+            element: document.getElementById('tileing-color-ground-inp')
+        },
+        groundTileingOpacity: {
+            value: 25,
+            default: 25,
+            element: document.getElementById('tileing-opacity-ground-inp')
+        },
+        groundText: {
+            value: '#1a191b',
+            default: '#1a191b',
+            element: document.getElementById('sub-color-ground-inp')
+        }
+    }
+}
+
 let currentLayer = 1;
-let boardWidth = 5;
-let boardHeight = 5;
 
 let bombs = {
     all: 5,
-    layer: Array.from({ length: totalLayers }, () => 0),
+    layer: Array.from({ length: settings.size.layers.value }, () => 0),
     revealed: {
         all: 0,
-        layer: Array.from({ length: totalLayers }, () => 0)
+        layer: Array.from({ length: settings.size.layers.value }, () => 0)
     }
 };
 
-let boardData = Array.from({ length: totalLayers }, () => Array.from({ length: boardHeight }, () => Array.from({ length: boardWidth }, () => 0)));
-let openTiles = Array.from({ length: totalLayers }, () => []); // Create empty arrays for each layer to track opened tiles
+let boardData = Array.from({ length: settings.size.layers.value }, () => Array.from({ length: settings.size.height.value }, () => Array.from({ length: settings.size.width.value }, () => 0)));
+let openTiles = Array.from({ length: settings.size.layers.value }, () => []); // Create empty arrays for each layer to track opened tiles
 
 let flags = {
     total: {
         all: 0,
-        layer: Array.from({ length: totalLayers }, () => 0)
+        layer: Array.from({ length: settings.size.layers.value }, () => 0)
     },
-    layer: Array.from({ length: totalLayers }, () => []) // Create empty arrays for each layer to track flagged tiles
+    layer: Array.from({ length: settings.size.layers.value }, () => []) // Create empty arrays for each layer to track flagged tiles
 };
 
 function updateUI() {
@@ -32,12 +108,12 @@ function updateLayerDisplay() {
     const layerElement = document.getElementById('current-layer');
     if (!layerElement) return;
     
-    layerElement.textContent = `${currentLayer}/${totalLayers}`;
+    layerElement.textContent = `${currentLayer}/${settings.size.layers.value}`;
 
     if (currentLayer <= 1) document.getElementById('go-down-btn').disabled = true;
     else document.getElementById('go-down-btn').disabled = false;
 
-    if (currentLayer >= totalLayers) document.getElementById('go-up-btn').disabled = true;
+    if (currentLayer >= settings.size.layers.value) document.getElementById('go-up-btn').disabled = true;
     else document.getElementById('go-up-btn').disabled = false;
 }
 
@@ -45,7 +121,7 @@ function updateBombDisplay() {
     const bombAmountElement = document.getElementById('mines-left');
     if (!bombAmountElement) return;
 
-    bombAmountElement.textContent = `${bombs.all - flags.total.all - bombs.revealed.all} (${bombs.layer[currentLayer - 1] - flags.total.layer[currentLayer - 1] - bombs.revealed.layer[currentLayer - 1]})`;
+    bombAmountElement.textContent = `${settings.difficulty.bombAmount.value - flags.total.all - bombs.revealed.all} (${bombs.layer[currentLayer - 1] - flags.total.layer[currentLayer - 1] - bombs.revealed.layer[currentLayer - 1]})`;
 }
 
 function updateTilesToLayer() {
@@ -57,7 +133,7 @@ function updateTilesToLayer() {
 }
 
 function goUp() {
-    if (currentLayer < totalLayers) {
+    if (currentLayer < settings.size.layers.value) {
         currentLayer += 1;
         updateUI();
         setupBoard();
@@ -73,13 +149,13 @@ function goDown() {
 }
 
 function indexToCoordinates(index) {
-    const x = index % boardWidth;
-    const y = Math.floor(index / boardWidth);
+    const x = index % settings.size.width.value;
+    const y = Math.floor(index / settings.size.width.value);
     return { x, y };
 }
 
 function coordinatesToIndex(x, y) {
-    return y * boardWidth + x;
+    return y * settings.size.width.value + x;
 }
 
 function handleTileClick(index) {
@@ -183,15 +259,15 @@ function openAdjecent(layer, index) {
     let nl = 0, nx = 0, ny = 0, ni = 0;
     for (let offsetZ = -1; offsetZ <= 1; offsetZ++) {
         nl = layer + offsetZ;
-        if (nl < 1 || nl > totalLayers) continue; // Skip invalid layers
+        if (nl < 1 || nl > settings.size.layers.value) continue; // Skip invalid layers
 
         for (let offsetX = -1; offsetX <= 1; offsetX++) {
             nx = x + offsetX;
-            if (nx < 0 || nx >= boardWidth) continue; // Skip invalid tiles
+            if (nx < 0 || nx >= settings.size.width.value) continue; // Skip invalid tiles
 
             for (let offsetY = -1; offsetY <= 1; offsetY++) {
                 ny = y + offsetY;
-                if (ny < 0 || ny >= boardWidth) continue; // Skip invalid tiles
+                if (ny < 0 || ny >= settings.size.width.value) continue; // Skip invalid tiles
 
                 ni = coordinatesToIndex(nx, ny);
                 if (!isTileOpen(nl, ni)) mineGrass(ni, nl);
@@ -209,15 +285,15 @@ function getAdjecentKnownBombs(index, layer = currentLayer) {
     let nl = 0, nx = 0, ny = 0, ni = 0;
     for (let offsetZ = -1; offsetZ <= 1; offsetZ++) {
         nl = layer + offsetZ;
-        if (nl < 1 || nl > totalLayers) continue; // Skip invalid layers
+        if (nl < 1 || nl > settings.size.layers.value) continue; // Skip invalid layers
 
         for (let offsetX = -1; offsetX <= 1; offsetX++) {
             nx = x + offsetX;
-            if (nx < 0 || nx >= boardWidth) continue; // Skip invalid tiles
+            if (nx < 0 || nx >= settings.size.width.value) continue; // Skip invalid tiles
 
             for (let offsetY = -1; offsetY <= 1; offsetY++) {
                 ny = y + offsetY;
-                if (ny < 0 || ny >= boardWidth) continue; // Skip invalid tiles
+                if (ny < 0 || ny >= settings.size.width.value) continue; // Skip invalid tiles
 
                 ni = coordinatesToIndex(nx, ny);
                 if (flags.layer[nl - 1].includes(ni) || (isTileOpen(nl, ni) && isTileBomb(nl, ni))) adjecentKnownBombs++;
@@ -240,8 +316,8 @@ function getTileValueCords(layer, x, y) {
      * -2 ......... = invalid layer
      * -3 ......... = invalid coordinates
      */
-    if (layer < 1 || layer > totalLayers) return -2; // Invalid layer
-    if (x < 0 || x >= boardWidth || y < 0 || y >= boardWidth) return -3; // Invalid coordinates
+    if (layer < 1 || layer > settings.size.layers.value) return -2; // Invalid layer
+    if (x < 0 || x >= settings.size.width.value || y < 0 || y >= settings.size.width.value) return -3; // Invalid coordinates
     const value = boardData[layer - 1][y][x];
     return value;
 }
@@ -258,18 +334,85 @@ function getTileContent(index, layer = currentLayer, zeroContent = '', tileValue
 }
 
 function isTileOpen(layer, index) {
-    if (layer < 1 || layer > totalLayers) return true; // Invalid layer (if its invalid its open as it is not blocked by grass)
+    if (layer < 1 || layer > settings.size.layers.value) return true; // Invalid layer (if its invalid its open as it is not blocked by grass)
     return openTiles[layer - 1].includes(index);
 }
 
 function isTileFlagged(layer, index) {
-    if (layer < 1 || layer > totalLayers) return false; // Invalid layer
+    if (layer < 1 || layer > settings.size.layers.value) return false; // Invalid layer
     return flags.layer[layer - 1].includes(index);
 }
 
 function isTileBomb(layer, index) {
-    if (layer < 1 || layer > totalLayers) return false; // Invalid layer
+    if (layer < 1 || layer > settings.size.layers.value) return false; // Invalid layer
     return getTileValue(layer, index) >= 100;
+}
+
+function updateSetting(newValue, settingKey, subSettingKey = null) {
+    
+    let setting = settings[settingKey];
+    if (subSettingKey) setting = setting[subSettingKey];
+    
+    setting.value = newValue;
+    updateSettingHtml(setting.element, newValue);
+
+    console.log(settings);
+}
+
+function resetSetting(settingKey) {
+    let setting = settings[settingKey];
+
+    if (Object.hasOwn(setting, 'value')) {
+        updateSettingHtml(setting.element, setting.default);
+    } else {
+        for (let subKey of Object.keys(setting)) {
+            let subSetting = setting[subKey];
+            updateSettingHtml(subSetting.element, subSetting.default);
+        }
+    }
+}
+
+function mirrorHtmlToSettings() {
+    for (let key of Object.keys(settings)) {
+        let setting = settings[key];
+
+        if (Object.hasOwn(setting, 'value')) {
+            updateSettingHtml(setting.element, setting.value);
+        } 
+        else {
+            for (let subKey of Object.keys(setting)) {
+                let subSetting = setting[subKey];
+                updateSettingHtml(subSetting.element, subSetting.value);
+            }
+        }
+    }
+}
+
+function updateSettingHtml(element, value) {
+    if (element.tagName == 'INPUT') {
+        element.value = value;
+
+        let cssVariable = element.getAttribute('for-css');
+        if (cssVariable) {
+            console.log('has for-css')
+            const root = document.documentElement;
+            switch (element.type) {
+                case 'color':
+                    root.style.setProperty(cssVariable, value);
+                    break;
+    
+                case 'number':
+                    root.style.setProperty(cssVariable, value + '%');
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+    }
+    else if (element.tagName == 'CHECKBOX') {
+        element.checked = value;
+    }
 }
 
 function setupBoard() {
@@ -277,11 +420,11 @@ function setupBoard() {
     const boardInner = document.querySelector('.board-inner');
     if (!boardInner || !board) return;
 
-    board.style.setProperty('--column-count', boardWidth);
+    board.style.setProperty('--column-count', settings.size.width.value);
 
     let html = '';
     let tileOpened = false, tileContent = '', upperTileContent = '', lowerTileContent = '';
-    for (let i = 0; i < boardWidth * boardWidth; i++) {
+    for (let i = 0; i < settings.size.width.value * settings.size.width.value; i++) {
         tileOpened = isTileOpen(currentLayer, i);
         tileContent = tileOpened || isTileFlagged(currentLayer, i) ? getTileContent(i) : '';
         upperTileContent = isTileOpen(currentLayer + 1, i) || isTileFlagged(currentLayer + 1, i) ? getTileContent(i, currentLayer + 1, '-') : '?';
@@ -299,16 +442,16 @@ function setupBoard() {
 }
 
 function populateWithBombs() {
-    boardData = Array.from({ length: totalLayers }, () => Array.from({ length: boardHeight }, () => Array.from({ length: boardWidth }, () => 0)));
-    bombs.layer = Array.from({ length: totalLayers }, () => 0);
+    boardData = Array.from({ length: settings.size.layers.value }, () => Array.from({ length: settings.size.height.value }, () => Array.from({ length: settings.size.width.value }, () => 0)));
+    bombs.layer = Array.from({ length: settings.size.layers.value }, () => 0);
 
     let index = 0, layer = 0;
-    for (let i = 0; i < bombs.all; i++) {
-        index = Math.floor(Math.random() * ((boardWidth * boardHeight) - 1));
-        layer = Math.floor(Math.random() * (totalLayers - 1)) + 1;
+    for (let i = 0; i < settings.difficulty.bombAmount.value; i++) {
+        index = Math.floor(Math.random() * ((settings.size.width.value * settings.size.height.value) - 1));
+        layer = Math.floor(Math.random() * (settings.size.layers.value - 1)) + 1;
         while (getTileValue(layer, index) >= 100) { // Ensure random location is not a bomb
-            index = Math.floor(Math.random() * ((boardWidth * boardHeight) - 1));
-            layer = Math.floor(Math.random() * (totalLayers - 1)) + 1;
+            index = Math.floor(Math.random() * ((settings.size.width.value * settings.size.height.value) - 1));
+            layer = Math.floor(Math.random() * (settings.size.layers.value - 1)) + 1;
         }
 
         const { x, y } = indexToCoordinates(index);
@@ -317,13 +460,13 @@ function populateWithBombs() {
 
         // Go through each tile around
         for (let offsetZ = -1; offsetZ <= 1; offsetZ++) {
-            if (layer + offsetZ < 1 || layer + offsetZ > totalLayers) continue // Skip invalid layers
+            if (layer + offsetZ < 1 || layer + offsetZ > settings.size.layers.value) continue // Skip invalid layers
 
             for (let offsetX = -1; offsetX <= 1; offsetX++) {
-                if (x + offsetX < 0 || x + offsetX >= boardWidth) continue // Skip invalid tiles
+                if (x + offsetX < 0 || x + offsetX >= settings.size.width.value) continue // Skip invalid tiles
 
                 for (let offsetY = -1; offsetY <= 1; offsetY++) {
-                    if (y + offsetY < 0 || y + offsetY >= boardWidth) continue // Skip invalid tiles
+                    if (y + offsetY < 0 || y + offsetY >= settings.size.width.value) continue // Skip invalid tiles
 
                     increaseValue(layer + offsetZ, x + offsetX, y + offsetY);
                 }
@@ -337,6 +480,7 @@ function increaseValue(layer, x, y, value = 1) {
 }
 
 function initializeGame() {
+    mirrorHtmlToSettings();
     populateWithBombs();
     setupBoard();
     updateUI();

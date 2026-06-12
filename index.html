@@ -7,7 +7,7 @@
     <title>Minesweeper 3D</title>
     <!-- Manifest defines how the app appears when installed on a device -->
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="stylesheet" href="/styles.css?v=0.3" />
+    <link rel="stylesheet" href="/styles.css?v=0.4" />
 </head>
 <body>
     <dialog id="settings-dialog">
@@ -15,49 +15,90 @@
         <div class="settings-container">
             <fieldset>
                 <legend>Difficulty</legend>
+                <button class="settings-reset-btn" onclick="resetSetting('difficulty')"><i>Reset</i></button>
                 <div class="settings-item">
-                    <span>Bomb amount:</span>
-                    <input type="number" name="bomb-amount-inp" id="bomb-amount-inp" value="5" />
+                    <label for="bomb-amount-inp">Bomb amount:</label>
+                    <input type="number" name="bomb-amount-inp" id="bomb-amount-inp" value="5" onchange="updateSetting(this.value, 'difficulty', 'bombAmount')" />
                 </div>
                 <div class="settings-item">
-                    <span>Lives:</span>
-                    <input type="number" name="lives-inp" id="lives-inp" value="3" />
+                    <label for="lives-inp">Lives:</label>
+                    <input type="number" name="lives-inp" id="lives-inp" value="3" onchange="updateSetting(this.value, 'difficulty', 'lives')" />
                 </div>
+                <span class="tip-note">(Difficulty update at the start of a new game)</span>
                 <div class="settings-item">
-                    <input type="checkbox" name="bombs-on-layer-chbx" id="bombs-on-layer-chbx" checked />
+                    <input type="checkbox" name="bombs-on-layer-chbx" id="bombs-on-layer-chbx" checked onchange="updateSetting(this.value, 'difficulty', 'showLayerBombAmount')" />
                     <label for="bombs-on-layer-chbx">Show layer bomb amount</label>
                 </div>
             </fieldset>
     
             <fieldset>
                 <legend>Size</legend>
+                <button class="settings-reset-btn" onclick="resetSetting('size')"><i>Reset</i></button>
                 <div class="settings-item">
-                    <span>Width:</span>
-                    <input type="number" name="board-width-inp" id="board-width-inp" value="5" />
+                    <label for="board-width-inp">Width:</label>
+                    <input type="number" name="board-width-inp" id="board-width-inp" value="5" onchange="updateSetting(this.value, 'size', 'width')" />
                 </div>
                 <div class="settings-item">
-                    <span>Height:</span>
-                    <input type="text" name="board-height-inp" id="board-height-inp" value="Same as width" disabled />
+                    <label for="board-height-inp">Height:</label>
+                    <input type="text" name="board-height-inp" id="board-height-inp" value="Same as width" disabled onchange="updateSetting(this.value, 'size', 'height')" />
                 </div>
                 <div class="settings-item">
-                    <span>Layers:</span>
-                    <input type="number" name="board-layers-inp" id="board-layers-inp" value="3" />
+                    <label for="board-layers-inp">Layers:</label>
+                    <input type="number" name="board-layers-inp" id="board-layers-inp" value="3" onchange="updateSetting(this.value, 'size', 'layers')" />
                 </div>
+                <span class="tip-note">(Size update at the start of a new game)</span>
             </fieldset>
     
             <fieldset>
                 <legend>Colors</legend>
-                <!-- TODO -->
+                <button class="settings-reset-btn" onclick="resetSetting('colors')"><i>Reset</i></button>
+                <div class="settings-color-cont">
+                    <div class="settings-color-item">
+                        <div class="color-inp">
+                            <label for="color-grass-inp" style="--settings-item-label-color: var(--grass-text-color);">Grass</label>
+                            <div><input for-css="--board-grass-color" type="color" name="color-grass-inp" id="color-grass-inp" onchange="updateSetting(this.value, 'colors', 'grass')" /></div>
+                            <div class="color-tileing-preview" style="--preview-color: var(--board-grass-tiling-color); --preview-opacity: var(--board-grass-tiling-contrast);"></div>
+                        </div>
+
+                        <div class="sub-color-inp">
+                            <!-- <label for="sub-color-grass-inp">Text</label> -->
+                            <div><input for-css="--grass-text-color" type="color" name="sub-color-grass-inp" id="sub-color-grass-inp" onchange="updateSetting(this.value, 'colors', 'grassText')" /></div>
+                        </div>
+
+                        <div class="sub-color-inp">
+                            <div id="tileing-color-grass-inp-cont"><input for-css="--board-grass-tiling-color" type="color" name="tileing-color-grass-inp" id="tileing-color-grass-inp" onchange="updateSetting(this.value, 'colors', 'grassTileing')" /></div>
+                            <input for-css="--board-grass-tiling-contrast" type="number" min="0" max="100" name="tileing-opacity-grass-inp" id="tileing-opacity-grass-inp" onchange="updateSetting(this.value, 'colors', 'grassTileingOpacity')">
+                        </div>
+                    </div>
+
+                    <div class="settings-color-item">
+                        <div class="color-inp">
+                            <label for="color-ground-inp" style="--settings-item-label-color: var(--ground-text-color);">Ground</label>
+                            <div><input for-css="--board-ground-color" type="color" name="color-ground-inp" id="color-ground-inp" onchange="updateSetting(this.value, 'colors', 'ground')" /></div>
+                            <div class="color-tileing-preview" style="--preview-color: var(--board-ground-tiling-color); --preview-opacity: var(--board-ground-tiling-contrast);"></div>
+                        </div>
+
+                        <div class="sub-color-inp">
+                            <div><input for-css="--ground-text-color" type="color" name="sub-color-ground-inp" id="sub-color-ground-inp" onchange="updateSetting(this.value, 'colors', 'groundText')" /></div>
+                        </div>
+
+                        <div class="sub-color-inp">
+                            <div id="tileing-color-ground-inp-cont"><input for-css="--board-ground-tiling-color" type="color" name="tileing-color-ground-inp" id="tileing-color-ground-inp" onchange="updateSetting(this.value, 'colors', 'groundTileing')" /></div>
+                            <input for-css="--board-ground-tiling-contrast" type="number" min="0" max="100" name="tileing-opacity-ground-inp" id="tileing-opacity-ground-inp" onchange="updateSetting(this.value, 'colors', 'groundTileingOpacity')">
+                        </div>
+                    </div>
+                </div>
             </fieldset>
     
             <fieldset>
                 <legend>Other</legend>
                 <button class="default-box">Start new game</button>
+                <button class="default-box">Refresh app</button>
             </fieldset>
         </div>
 
         <div class="spacer" style="--height: 1rem;"></div>
-        <button class="default-box" commandfor="settings-dialog" command="close">Close</button>
+        <button class="default-box" commandfor="settings-dialog" command="close" autofocus>Close</button>
     </dialog>
 
     <header>
@@ -107,6 +148,6 @@
     </footer>
 
     <script src="/app.js?v=0.2"></script>
-    <script src="/game.js?v=0.3"></script>
+    <script src="/game.js?v=0.5"></script>
 </body>
 </html>
