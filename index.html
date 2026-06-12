@@ -87,6 +87,13 @@
                             <input for-css="--board-ground-tiling-contrast" type="number" min="0" max="100" name="tileing-opacity-ground-inp" id="tileing-opacity-ground-inp" onchange="updateSetting(this.value, 'colors', 'groundTileingOpacity')">
                         </div>
                     </div>
+                    
+                    <div class="settings-color-item">
+                        <div class="color-inp">
+                            <label for="color-flag-inp" style="--settings-item-label-color: var(--default-color);">Flag</label>
+                            <div><input for-css="--flag-color" type="color" name="color-flag-inp" id="color-flag-inp" onchange="updateSetting(this.value, 'colors', 'flag')" /></div>
+                        </div>
+                    </div>
                 </div>
             </fieldset>
     

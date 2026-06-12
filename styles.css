@@ -11,6 +11,7 @@
     --grass-text-color: #ecf0f1;
     --ground-text-color: #1a191b;
     --tiny-info-opacity: .8;
+    --flag-color: #ea101b;
 
     --body-padding: 2rem;
     --board-width: min(100vw - var(--body-padding) * 2, 100vh - (var(--body-padding) * 2 + 12rem));
@@ -53,7 +54,7 @@ body {
 .mine { /* Mine icon */
     width: 70%;
     height: 70%;
-    background-color: var(--ground-text-color);
+    background-color: var(--default-color);
     mask-image: url(/icons/mine.svg);
     mask-size: contain;
     mask-repeat: no-repeat;
@@ -66,7 +67,7 @@ body {
 .flag { /* Flag icon */
     width: 70%;
     height: 70%;
-    background-color: var(--grass-text-color);
+    background-color: var(--flag-color);
     mask-image: url(/icons/flag.svg);
     mask-size: contain;
     mask-repeat: no-repeat;
@@ -137,7 +138,7 @@ body {
                 background-color: color-mix(in srgb, var(--board-grass-tiling-color) var(--board-grass-tiling-contrast), var(--board-grass-color));
             }
 
-            .flag, .mine {
+            .mine {
                 background-color: var(--grass-text-color);
             }
         }
@@ -153,7 +154,7 @@ body {
                 background-color: color-mix(in srgb, var(--board-ground-tiling-color) var(--board-ground-tiling-contrast), var(--board-ground-color));
             }
 
-            .flag, .mine {
+            .mine {
                 background-color: var(--ground-text-color);
             }
         }
@@ -503,7 +504,7 @@ button {
         display: none;
 
         &:checked + label {
-            background-color: #ea101b;
+            background-color: var(--flag-color);
             cursor: default;
 
             > img {

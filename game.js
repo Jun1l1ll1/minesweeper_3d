@@ -34,6 +34,11 @@ let settings = {
         }
     },
     colors: {
+        flag: {
+            value: '#ea101b',
+            default: '#ea101b',
+            element: 'color-flag-inp'
+        },
         grass: {
             value: '#306d53',
             default: '#306d53',
@@ -362,10 +367,12 @@ function resetSetting(settingKey) {
     let setting = settings[settingKey];
 
     if (Object.hasOwn(setting, 'value')) {
+        setting.value = setting.default;
         updateSettingHtml(setting.element, setting.default);
     } else {
         for (let subKey of Object.keys(setting)) {
             let subSetting = setting[subKey];
+            subSetting.value = subSetting.default;
             updateSettingHtml(subSetting.element, subSetting.default);
         }
     }
@@ -400,6 +407,7 @@ function updateSettingHtml(elementId, value) {
             const root = document.documentElement;
             switch (element.type) {
                 case 'color':
+                    console.log(element)
                     root.style.setProperty(cssVariable, value);
                     break;
     
@@ -424,7 +432,28 @@ function saveSettingsToCookie() {
 function loadSettingsFromCookie() {
     let cookieSettings = getCookie('settings', true);
 
-    if (cookieSettings) settings = cookieSettings;
+    if (cookieSettings && keysMatch(cookieSettings, settings)) {
+        settings = cookieSettings;
+    }
+}
+
+function keysMatch(obj1, obj2) {
+    if ((typeof obj1 === 'object' && !Array.isArray(obj1)) && (typeof obj2 === 'object' && !Array.isArray(obj2))) {
+
+        const keysObj1 = Object.keys(obj1);
+        if (keysObj1.length != Object.keys(obj2).length) return false;
+
+        for (let key of keysObj1) {
+            if (!Object.hasOwn(obj2, key)) return false;
+
+            const valObj1 = obj1[key];
+            const valObj2 = obj2[key];
+
+            if (!keysMatch(valObj1, valObj2)) return false;
+        }
+    }
+
+    return true;
 }
 
 
