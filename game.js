@@ -4,75 +4,75 @@ let settings = {
         bombAmount: {
             value: 4,
             default: 4,
-            element: document.getElementById('bomb-amount-inp')
+            element: 'bomb-amount-inp'
         },
         lives: { //TODO: Link this up and add death
             value: 3,
             default: 3,
-            element: document.getElementById('lives-inp')
+            element: 'lives-inp'
         },
         showLayerBombAmount: { //TODO: Use this
             value: true,
-            element: document.getElementById('bombs-on-layer-chbx')
+            element: 'bombs-on-layer-chbx'
         }
     },
     size: {
         width: {
             value: 5,
             default: 5,
-            element: document.getElementById('board-width-inp')
+            element: 'board-width-inp'
         },
         height: {
             value: 5,
             default: 5,
-            element: document.getElementById('board-height-inp')
+            element: 'board-height-inp'
         },
         layers: {
             value: 3,
             default: 3,
-            element: document.getElementById('board-layers-inp')
+            element: 'board-layers-inp'
         }
     },
     colors: {
         grass: {
             value: '#306d53',
             default: '#306d53',
-            element: document.getElementById('color-grass-inp')
+            element: 'color-grass-inp'
         },
         grassTileing: {
             value: '#171b45',
             default: '#171b45',
-            element: document.getElementById('tileing-color-grass-inp')
+            element: 'tileing-color-grass-inp'
         },
         grassTileingOpacity: {
             value: 20,
             default: 20,
-            element: document.getElementById('tileing-opacity-grass-inp')
+            element: 'tileing-opacity-grass-inp'
         },
         grassText: {
             value: '#ecf0f1',
             default: '#ecf0f1',
-            element: document.getElementById('sub-color-grass-inp')
+            element: 'sub-color-grass-inp'
         },
         ground: {
             value: '#c9ad80',
             default: '#c9ad80',
-            element: document.getElementById('color-ground-inp')
+            element: 'color-ground-inp'
         },
         groundTileing: {
             value: '#441745',
             default: '#441745',
-            element: document.getElementById('tileing-color-ground-inp')
+            element: 'tileing-color-ground-inp'
         },
         groundTileingOpacity: {
             value: 25,
             default: 25,
-            element: document.getElementById('tileing-opacity-ground-inp')
+            element: 'tileing-opacity-ground-inp'
         },
         groundText: {
             value: '#1a191b',
             default: '#1a191b',
-            element: document.getElementById('sub-color-ground-inp')
+            element: 'sub-color-ground-inp'
         }
     }
 }
@@ -164,7 +164,6 @@ function handleTileClick(index) {
         const tile = document.getElementById(`tile-number-${index}`);
         if (!tile) return;
         const tileNumber = parseInt(tile.innerText);
-        console.log(getAdjecentKnownBombs(index), tileNumber);
         if (tileNumber == NaN) return;
 
         if (getAdjecentKnownBombs(index) >= tileNumber) openAdjecent(currentLayer, index);
@@ -356,7 +355,7 @@ function updateSetting(newValue, settingKey, subSettingKey = null) {
     setting.value = newValue;
     updateSettingHtml(setting.element, newValue);
 
-    console.log(settings);
+    saveSettingsToCookie();
 }
 
 function resetSetting(settingKey) {
@@ -370,6 +369,8 @@ function resetSetting(settingKey) {
             updateSettingHtml(subSetting.element, subSetting.default);
         }
     }
+
+    saveSettingsToCookie();
 }
 
 function mirrorHtmlToSettings() {
@@ -388,13 +389,14 @@ function mirrorHtmlToSettings() {
     }
 }
 
-function updateSettingHtml(element, value) {
+function updateSettingHtml(elementId, value) {
+    const element = document.getElementById(elementId);
+
     if (element.tagName == 'INPUT') {
         element.value = value;
 
         let cssVariable = element.getAttribute('for-css');
         if (cssVariable) {
-            console.log('has for-css')
             const root = document.documentElement;
             switch (element.type) {
                 case 'color':
@@ -414,6 +416,43 @@ function updateSettingHtml(element, value) {
         element.checked = value;
     }
 }
+
+function saveSettingsToCookie() {
+    cookiefy('settings', settings, true);
+}
+
+function loadSettingsFromCookie() {
+    let cookieSettings = getCookie('settings', true);
+
+    if (cookieSettings) settings = cookieSettings;
+}
+
+
+function cookiefy(cookieName, value, json = false) {
+    let cookieValue;
+    if (json) cookieValue = JSON.stringify(value);
+    else cookieValue = value;
+
+    document.cookie = `${cookieName}=${cookieValue}`;
+}
+
+function getCookie(cookieName, json = false) {
+    const cookieMatch = document.cookie.match(new RegExp('(^| )' + cookieName + '=([^;]+)'));
+    
+    if (cookieMatch) {
+        const decodedValue = cookieMatch[2];
+        if (!decodedValue || decodedValue == 'undefined') return null;
+
+        let val;
+        if (json) val = JSON.parse(decodedValue);
+        else val = decodedValue;
+
+        return val;
+    }
+
+    return null;
+}
+
 
 function setupBoard() {
     const board = document.querySelector('.board');
@@ -480,6 +519,7 @@ function increaseValue(layer, x, y, value = 1) {
 }
 
 function initializeGame() {
+    loadSettingsFromCookie();
     mirrorHtmlToSettings();
     populateWithBombs();
     setupBoard();
