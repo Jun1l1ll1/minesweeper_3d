@@ -111,6 +111,15 @@
         <button class="setting-opt-btn" commandfor="settings-dialog" command="close" autofocus>Close</button>
     </dialog>
 
+    <dialog id="game-end-dialog">
+        <center>
+            <h1 id="game-end-status">You xx</h1>
+        </center>
+        <button class="" commandfor="settings-dialog" command="show-modal">Open settings</button>
+        <div class="spacer" style="--height: 1rem;"></div>
+        <button class="" onclick="restartGame()" autofocus>New game</button>
+    </dialog>
+
     <header>
         <div class="flex" style="--direction: row; --gap: 1rem;">
             <h2 id="lives" class="default-box digital">3/3</h2>

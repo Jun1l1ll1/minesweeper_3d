@@ -97,11 +97,11 @@ let currentLayer;
 let totalLives;
 let currentLives;
 
-let bombs;
+let bombs = {all:0, layer:[], revealed: {all:0, layer:[]}};
 
 let boardData;
-let openTiles;
-let flags;
+let openTiles = {total:0, layers:[]};
+let flags = {total: {all:0, layer:[]}, layer:[]};
 
 function setupGameVariables() {
     boardWidth = settings.size.width.value;
@@ -124,7 +124,10 @@ function setupGameVariables() {
     };
 
     boardData = Array.from({ length: totalLayers }, () => Array.from({ length: boardHeight }, () => Array.from({ length: boardWidth }, () => 0)));
-    openTiles = Array.from({ length: totalLayers }, () => []); // Create empty arrays for each layer to track opened tiles
+    openTiles = {
+        total: 0,
+        layers: Array.from({ length: totalLayers }, () => []) // Create empty arrays for each layer to track opened tiles
+    };
 
     flags = {
         total: {
@@ -172,7 +175,7 @@ function updateLivesDisplay() {
 }
 
 function updateTilesToLayer() {
-    const openTileIndexes = openTiles[currentLayer - 1];
+    const openTileIndexes = openTiles.layers[currentLayer - 1];
     openTileIndexes.forEach(index => {
         const tileNumber = document.getElementById(`tile-number-${index}`);
         if (!tileNumber) return;
@@ -268,8 +271,8 @@ function mineGrass(index, layer = currentLayer) {
         return; // Do not open a flagged tile unless the flag is removed first
     }
 
-    if (!openTiles[layer - 1].includes(index)) {
-        openTiles[layer - 1].push(index);
+    if (!openTiles.layers[layer - 1].includes(index)) {
+        openTiles.layers[layer - 1].push(index);
     }
 
     const tileValue = getTileValue(layer, index);
@@ -279,6 +282,8 @@ function mineGrass(index, layer = currentLayer) {
         bombs.revealed.layer[layer - 1] += 1;
         loseLives();
     }
+
+    openTiles.total++;
 
     if (tileValue == 0) openAdjecent(layer, index); // Open all adjecent tiles
 
@@ -296,6 +301,10 @@ function mineGrass(index, layer = currentLayer) {
     }
 
     updateBombDisplay();
+
+    const correctlyOpenedTiles = openTiles.total - bombs.revealed.all;
+    const totalNonBombTiles = boardHeight*boardWidth*totalLayers - bombs.all;
+    if (correctlyOpenedTiles >= totalNonBombTiles) winGame();
 }
 
 function openAdjecent(layer, index) {
@@ -381,7 +390,7 @@ function getTileContent(index, layer = currentLayer, zeroContent = '', tileValue
 
 function isTileOpen(layer, index) {
     if (layer < 1 || layer > totalLayers) return true; // Invalid layer (if its invalid its open as it is not blocked by grass)
-    return openTiles[layer - 1].includes(index);
+    return openTiles.layers[layer - 1].includes(index);
 }
 
 function isTileFlagged(layer, index) {
@@ -536,13 +545,13 @@ function loseLives(amount = 1) {
 }
 
 function loseGame() {
-    //TODO
-    console.log('You lost...');
+    document.getElementById('game-end-status').innerText = 'You lost...';
+    document.getElementById('game-end-dialog').showModal();
 }
 
 function winGame() {
-    //TODO
-    console.log('You won!');
+    document.getElementById('game-end-status').innerText = 'You won!';
+    document.getElementById('game-end-dialog').showModal();
 }
 
 
@@ -580,7 +589,7 @@ function populateWithBombs() {
     for (let i = 0; i < bombs.all; i++) {
         index = Math.floor(Math.random() * ((boardWidth * boardHeight) - 1));
         layer = Math.floor(Math.random() * (totalLayers - 1)) + 1;
-        
+
         let maxAttempts = 100;
         while (getTileValue(layer, index) >= 100 && maxAttempts > 0) { // Ensure random location is not a bomb
             index = Math.floor(Math.random() * ((boardWidth * boardHeight) - 1));
@@ -616,6 +625,7 @@ function increaseValue(layer, x, y, value = 1) {
 
 function restartGame() {
     initializeGame();
+    document.getElementById('game-end-dialog').close();
 }
 
 
