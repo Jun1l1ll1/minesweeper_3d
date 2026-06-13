@@ -1,4 +1,5 @@
 :root {
+    --vh: 1vh;
     --default-color: #ecf0f1;
 
     --board-grass-color: #306d53;
@@ -28,9 +29,13 @@
     box-sizing: border-box;
 }
 
+html, body {
+    min-height: 100%;
+}
+
 body {
     margin: 0;
-    height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
     display: flex;
     flex-direction: column;
     align-items: center;

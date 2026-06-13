@@ -6,6 +6,10 @@ const refreshButton = document.getElementById('refresh-btn');
 const statusText = document.getElementById('pwa-status');
 
 let deferredPrompt;
+const updateViewportHeight = () => {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+};
+
 // let boardScale = 1;
 // let initialPinchDistance = null;
 // let initialBoardScale = 1;
@@ -34,6 +38,7 @@ function updateStatus() {
 }
 
 window.addEventListener('load', () => {
+    updateViewportHeight();
     updateStatus();
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
@@ -75,6 +80,7 @@ window.addEventListener('load', () => {
 });
 
 // Update the status message whenever connectivity changes
+window.addEventListener('resize', updateViewportHeight);
 window.addEventListener('online', updateStatus);
 window.addEventListener('offline', updateStatus);
 
