@@ -53,6 +53,6 @@ self.addEventListener('fetch', (event) => {
 
     // For other assets, try cache first then fall back to network
     event.respondWith(
-        caches.match(request).then((cachedResponse) => cachedResponse || fetch(request))
+        caches.match(request, { ignoreSearch: true }).then((cachedResponse) => cachedResponse || fetch(request))
     );
 });
