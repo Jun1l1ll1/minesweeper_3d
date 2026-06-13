@@ -13,6 +13,7 @@ let settings = {
         },
         showLayerBombAmount: {
             value: true,
+            default: true,
             element: 'bombs-on-layer-chbx'
         }
     },
@@ -104,6 +105,7 @@ let flags;
 
 function setupGameVariables() {
     boardWidth = settings.size.width.value;
+    settings.size.height.value = boardWidth; // Because custome height is not implemented yet
     boardHeight = settings.size.height.value;
 
     totalLayers = settings.size.layers.value;
