@@ -8,6 +8,11 @@ let presets = {
 }
 
 let settings = {
+    preset: {
+        value: 'Easy',
+        default: 'Easy',
+        element: 'preset-select'
+    },
     difficulty: {
         bombAmount: {
             value: 4,
@@ -114,7 +119,7 @@ let openTiles = {total:0, layers:[]};
 let flags = {total: {all:0, layer:[]}, layer:[]};
 
 function setupGameVariables() {
-    currentPreset = 0;
+    currentPreset = presets[settings.preset.value];
 
     boardWidth = settings.size.width.value;
     settings.size.height.value = boardWidth; // Because custome height is not implemented yet
@@ -435,6 +440,7 @@ function resetSetting(settingKey) {
     let setting = settings[settingKey];
 
     if (Object.hasOwn(setting, 'value')) {
+        let defValue = settingKey == 'preset' ? setting.default : setting.default[currentPreset];
         setting.value = setting.default[currentPreset];
         updateSettingHtml(setting.element, setting.default[currentPreset]);
     } else {
@@ -468,7 +474,7 @@ function mirrorHtmlToSettings() {
 function updateSettingHtml(elementId, value) {
     const element = document.getElementById(elementId);
 
-    if (element.tagName == 'INPUT') {
+    if (element.tagName == 'INPUT' || element.tagName == 'SELECT') {
 
         if (element.type == 'checkbox') element.checked = value;
         else element.value = value;

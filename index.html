@@ -7,7 +7,7 @@
     <title>Minesweeper 3D</title>
     <!-- Manifest defines how the app appears when installed on a device -->
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="stylesheet" href="/styles.css?v=0.6" />
+    <link rel="stylesheet" href="/styles.css?v=0.7" />
 </head>
 <body>
     <dialog id="settings-dialog">
@@ -15,7 +15,16 @@
         <div class="settings-container">
             <fieldset>
                 <legend>Pre-sets</legend>
-                
+                <div class="settings-item">
+                    <label for="preset-select">Pre-set:</label>
+                    <select name="preset-select" id="preset-select">
+                        <option value="1D">1D</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                        <option value="Insane">Insane</option>
+                    </select>
+                </div>
             </fieldset>
 
             <fieldset>
@@ -174,7 +183,7 @@
         </div>
     </footer>
 
-    <script src="/app.js?n=app&v=0.3"></script>
-    <script src="/game.js?n=game&v=0.9"></script>
+    <script src="/app.js?n=App&v=0.4"></script>
+    <script src="/game.js?n=Game&v=0.10"></script>
 </body>
 </html>

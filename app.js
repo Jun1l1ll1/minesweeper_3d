@@ -47,7 +47,7 @@ function updateVersions() {
             scriptUrl = new URL(script.src);
             n = scriptUrl.searchParams.get('n');
             v = scriptUrl.searchParams.get('v');
-            document.getElementById(n + '-js-version').innerText = `${n} version: ${v}`;
+            document.getElementById(n.toLowerCase() + '-js-version').innerText = `${n} version: ${v}`;
         }
     }
 }
