@@ -11,7 +11,7 @@ let settings = {
             default: 3,
             element: 'lives-inp'
         },
-        showLayerBombAmount: { //TODO: Use this
+        showLayerBombAmount: {
             value: true,
             element: 'bombs-on-layer-chbx'
         }
@@ -126,7 +126,9 @@ function updateBombDisplay() {
     const bombAmountElement = document.getElementById('mines-left');
     if (!bombAmountElement) return;
 
-    bombAmountElement.textContent = `${settings.difficulty.bombAmount.value - flags.total.all - bombs.revealed.all} (${bombs.layer[currentLayer - 1] - flags.total.layer[currentLayer - 1] - bombs.revealed.layer[currentLayer - 1]})`;
+    let text = `${settings.difficulty.bombAmount.value - flags.total.all - bombs.revealed.all}`;
+    if (settings.difficulty.showLayerBombAmount.value) text += ` (${bombs.layer[currentLayer - 1] - flags.total.layer[currentLayer - 1] - bombs.revealed.layer[currentLayer - 1]})`;
+    bombAmountElement.textContent = text;
 }
 
 function updateTilesToLayer() {
@@ -356,10 +358,14 @@ function updateSetting(newValue, settingKey, subSettingKey = null) {
     
     let setting = settings[settingKey];
     if (subSettingKey) setting = setting[subSettingKey];
-    
-    setting.value = newValue;
-    updateSettingHtml(setting.element, newValue);
 
+    setting.value = newValue;
+
+    // Special cases:
+    console.log(subSettingKey, setting)
+    if (subSettingKey == 'showLayerBombAmount') updateBombDisplay();
+
+    updateSettingHtml(setting.element, newValue);
     saveSettingsToCookie();
 }
 
@@ -400,14 +406,15 @@ function updateSettingHtml(elementId, value) {
     const element = document.getElementById(elementId);
 
     if (element.tagName == 'INPUT') {
-        element.value = value;
+
+        if (element.type == 'checkbox') element.checked = value;
+        else element.value = value;
 
         let cssVariable = element.getAttribute('for-css');
         if (cssVariable) {
             const root = document.documentElement;
             switch (element.type) {
                 case 'color':
-                    console.log(element)
                     root.style.setProperty(cssVariable, value);
                     break;
     
@@ -419,9 +426,6 @@ function updateSettingHtml(elementId, value) {
                     break;
             }
         }
-    }
-    else if (element.tagName == 'CHECKBOX') {
-        element.checked = value;
     }
 }
 
