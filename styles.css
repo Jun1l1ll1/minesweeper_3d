@@ -151,6 +151,9 @@ body {
             .mine, .flag {
                 background-color: var(--grass-flag-color);
             }
+            >.tile-tiny-info-number>.mine, >.tile-tiny-info-number>.flag {
+                background-color: var(--grass-text-color);
+            }
         }
 
         &.ground {
@@ -166,6 +169,9 @@ body {
 
             .mine, .flag {
                 background-color: var(--ground-flag-color);
+            }
+            >.tile-tiny-info-number>.mine, >.tile-tiny-info-number>.flag {
+                background-color: var(--ground-text-color);
             }
         }
     }

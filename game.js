@@ -571,8 +571,8 @@ function setupBoard() {
     for (let i = 0; i < boardWidth * boardWidth; i++) {
         tileOpened = isTileOpen(currentLayer, i);
         tileContent = tileOpened || isTileFlagged(currentLayer, i) ? getTileContent(i) : '';
-        upperTileContent = isTileOpen(currentLayer + 1, i) || isTileFlagged(currentLayer + 1, i) ? getTileContent(i, currentLayer + 1, '-') : '??';
-        lowerTileContent = isTileOpen(currentLayer - 1, i) || isTileFlagged(currentLayer - 1, i) ? getTileContent(i, currentLayer - 1, '-') : '??';
+        upperTileContent = (isTileOpen(currentLayer + 1, i) && isTileBomb(currentLayer + 1, i)) || isTileFlagged(currentLayer + 1, i) ? getTileContent(i, currentLayer + 1, '-') : '';
+        lowerTileContent = (isTileOpen(currentLayer - 1, i) && isTileBomb(currentLayer - 1, i)) || isTileFlagged(currentLayer - 1, i) ? getTileContent(i, currentLayer - 1, '-') : '';
 
         html += `
             <button class="tile ${tileOpened ? 'ground' : 'grass'}" onClick="handleTileClick(${i})" oncontextmenu="handleTileRightClick(${i}, event)">
