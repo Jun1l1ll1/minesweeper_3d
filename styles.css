@@ -343,6 +343,7 @@ h2 {
         > input[type="color"] {
             min-width: calc(100% + 1rem);
             min-height: calc(100% + 1rem);
+            border-radius: 0;
             padding: 0;
         }
     }
