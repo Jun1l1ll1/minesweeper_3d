@@ -555,6 +555,10 @@ function winGame() {
 }
 
 
+function openSettings() { document.getElementById('settings-dialog').showModal(); }
+function closeSettings() { document.getElementById('settings-dialog').close(); }
+
+
 function setupBoard() {
     const board = document.querySelector('.board');
     const boardInner = document.querySelector('.board-inner');
@@ -624,6 +628,7 @@ function increaseValue(layer, x, y, value = 1) {
 
 
 function restartGame() {
+    closeSettings();
     initializeGame(false);
     document.getElementById('game-end-dialog').close();
 }

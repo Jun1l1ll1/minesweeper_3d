@@ -102,21 +102,21 @@
     
             <fieldset>
                 <legend>Other</legend>
-                <button class="setting-opt-btn" onclick="restartGame()" commandfor="settings-dialog" command="close">Start new game</button>
+                <button class="setting-opt-btn" onclick="restartGame()">Start new game</button>
                 <button class="setting-opt-btn" id="refresh-btn">Refresh app</button>
                 <span id="pwa-status">Status</span>
             </fieldset>
         </div>
 
         <div class="spacer" style="--height: 1rem;"></div>
-        <button class="setting-opt-btn" commandfor="settings-dialog" command="close" autofocus>Close</button>
+        <button class="setting-opt-btn" onclick="closeSettings()" autofocus>Close</button>
     </dialog>
 
     <dialog id="game-end-dialog">
         <center>
             <h1 id="game-end-status">You xx</h1>
         </center>
-        <button class="" commandfor="settings-dialog" command="show-modal">Open settings</button>
+        <button class="" onclick="openSettings()">Open settings</button>
         <div class="spacer" style="--height: 1rem;"></div>
         <button class="" onclick="restartGame()" autofocus>New game</button>
     </dialog>
@@ -131,7 +131,7 @@
             <button id="install-button" class="hidden default-box" aria-label="Install PWA">
                 <img src="/icons/download.svg" alt="Download" width="20" height="20" />
             </button>
-            <button commandfor="settings-dialog" command="show-modal" id="settings-btn" aria-label="Settings">
+            <button onclick="openSettings()" id="settings-btn" aria-label="Settings">
                 <img src="/icons/settings.svg" alt="Settings" width="36" height="36" />
             </button>
         </div>
