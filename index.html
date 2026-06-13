@@ -7,7 +7,7 @@
     <title>Minesweeper 3D</title>
     <!-- Manifest defines how the app appears when installed on a device -->
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="stylesheet" href="/styles.css?v=0.4" />
+    <link rel="stylesheet" href="/styles.css?v=0.5" />
 </head>
 <body>
     <dialog id="settings-dialog">
@@ -105,6 +105,8 @@
                 <button class="setting-opt-btn" onclick="restartGame()">Start new game</button>
                 <button class="setting-opt-btn" id="refresh-btn">Refresh app</button>
                 <span id="pwa-status">Status</span>
+                <span id="game-js-version">Game: </span>
+                <span id="app-js-version">App: </span>
             </fieldset>
         </div>
 
@@ -167,7 +169,7 @@
         </div>
     </footer>
 
-    <script src="/app.js?v=0.2"></script>
-    <script src="/game.js?v=0.5"></script>
+    <script src="/app.js?n=app&v=0.3"></script>
+    <script src="/game.js?n=game&v=0.6"></script>
 </body>
 </html>

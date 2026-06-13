@@ -39,9 +39,23 @@ function updateStatus() {
         : 'You are offline. The app will still work with cached content.';
 }
 
+function updateVersions() {
+    let scripts = document.getElementsByTagName('script');
+    let scriptUrl, params;
+    for (let script of scripts) {
+        if (script.src) {
+            scriptUrl = new URL(script.src);
+            n = scriptUrl.searchParams.get('n');
+            v = scriptUrl.searchParams.get('v');
+            document.getElementById(n + '-js-version').innerText = `${n} version: ${v}`;
+        }
+    }
+}
+
 window.addEventListener('load', () => {
     updateViewportHeight();
     updateStatus();
+    updateVersions();
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
             .then(() => console.log('Service Worker registered.'))
