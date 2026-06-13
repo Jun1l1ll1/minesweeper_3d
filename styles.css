@@ -139,10 +139,7 @@ body {
                 background-color: color-mix(in srgb, var(--board-grass-tiling-color) var(--board-grass-tiling-contrast), var(--board-grass-color));
             }
 
-            .mine {
-                background-color: var(--grass-text-color);
-            }
-            .flag {
+            .mine, .flag {
                 background-color: var(--grass-flag-color);
             }
         }
@@ -158,10 +155,7 @@ body {
                 background-color: color-mix(in srgb, var(--board-ground-tiling-color) var(--board-ground-tiling-contrast), var(--board-ground-color));
             }
 
-            .mine {
-                background-color: var(--ground-text-color);
-            }
-            .flag {
+            .mine, .flag {
                 background-color: var(--ground-flag-color);
             }
         }
@@ -249,6 +243,10 @@ h2 {
 
     > i {
         opacity: .4;
+    }
+
+    &:hover {
+        background: #222222;
     }
 }
 
@@ -456,14 +454,6 @@ h2 {
     }
 }
 
-#settings-btn {
-    width: fit-content;
-    background: none;
-
-    &:hover {
-        transform: rotateZ(45deg);
-    }
-}
 
 button {
     border: none;
@@ -474,6 +464,24 @@ button {
     cursor: pointer;
     transition: transform 0.2s ease, background-color 0.2s ease;
     color: var(--default-color);
+    
+    &:disabled {
+        cursor: not-allowed;
+        color: rgba(255, 255, 255, 0.4);
+    }
+}
+
+input {
+    &:not([type='text']):not([type='number']) {
+        cursor: pointer;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
+label {
+    cursor: pointer;
 }
 
 
@@ -490,6 +498,24 @@ button {
 
     > img {
         filter: brightness(40%); /* Change brightness to get a gray-ish color */
+    }
+    
+    &:hover {
+        transform: rotateZ(45deg);
+    }
+}
+
+.setting-opt-btn {
+    height: fit-content;
+    width: 100%;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    padding: .5rem .75rem;
+    
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
     }
 }
 

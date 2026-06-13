@@ -102,13 +102,13 @@
     
             <fieldset>
                 <legend>Other</legend>
-                <button class="default-box">Start new game</button>
-                <button class="default-box">Refresh app</button>
+                <button class="setting-opt-btn" onclick="restartGame()" commandfor="settings-dialog" command="close">Start new game</button>
+                <button class="setting-opt-btn" disabled>Refresh app</button>
             </fieldset>
         </div>
 
         <div class="spacer" style="--height: 1rem;"></div>
-        <button class="default-box" commandfor="settings-dialog" command="close" autofocus>Close</button>
+        <button class="setting-opt-btn" commandfor="settings-dialog" command="close" autofocus>Close</button>
     </dialog>
 
     <header>
