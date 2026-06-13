@@ -575,8 +575,8 @@ label {
 }
 
 .layer-swap {
-    height: fit-content;
-    width: fit-content;
+    height: 6rem;
+    width: 4rem;
     display: inline-flex;
     flex-direction: column;
     gap: 0;

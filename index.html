@@ -7,12 +7,17 @@
     <title>Minesweeper 3D</title>
     <!-- Manifest defines how the app appears when installed on a device -->
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="stylesheet" href="/styles.css?v=0.5" />
+    <link rel="stylesheet" href="/styles.css?v=0.6" />
 </head>
 <body>
     <dialog id="settings-dialog">
 
         <div class="settings-container">
+            <fieldset>
+                <legend>Pre-sets</legend>
+                
+            </fieldset>
+
             <fieldset>
                 <legend>Difficulty</legend>
                 <button class="settings-reset-btn" onclick="resetSetting('difficulty')"><i>Reset</i></button>
@@ -84,7 +89,7 @@
                         <div class="color-inp">
                             <label for="color-ground-inp" style="--settings-item-label-color: var(--ground-text-color);">Ground</label>
                             <div><input for-css="--board-ground-color" type="color" name="color-ground-inp" id="color-ground-inp" onchange="updateSetting(this.value, 'colors', 'ground')" /></div>
-                            <label for="flag-color-ground-inp" class="color-flag-preview flag" style="--preview-color: var(--ground-flag-color);"></label>
+                            <label for="flag-color-ground-inp" class="color-flag-preview mine" style="--preview-color: var(--ground-flag-color);"></label>
                             <div class="color-tileing-preview" style="--preview-color: var(--board-ground-tiling-color); --preview-opacity: var(--board-ground-tiling-contrast);"></div>
                         </div>
 
@@ -170,6 +175,6 @@
     </footer>
 
     <script src="/app.js?n=app&v=0.3"></script>
-    <script src="/game.js?n=game&v=0.7"></script>
+    <script src="/game.js?n=game&v=0.9"></script>
 </body>
 </html>

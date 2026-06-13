@@ -1,36 +1,44 @@
 
+let presets = {
+    '1D': 0,
+    'Easy': 1,
+    'Medium': 2,
+    'Hard': 3,
+    'Insane': 4
+}
+
 let settings = {
     difficulty: {
         bombAmount: {
             value: 4,
-            default: 4,
+            default: [6, 4, 11, 25, 70],
             element: 'bomb-amount-inp'
         },
         lives: {
             value: 3,
-            default: 3,
+            default: [1, 3, 3, 2, 1],
             element: 'lives-inp'
         },
         showLayerBombAmount: {
             value: true,
-            default: true,
+            default: [false, true, true, true, false],
             element: 'bombs-on-layer-chbx'
         }
     },
     size: {
         width: {
             value: 5,
-            default: 5,
+            default: [7, 5, 7, 11, 13],
             element: 'board-width-inp'
         },
         height: {
             value: 5,
-            default: 5,
+            default: [7, 5, 7, 11, 13],
             element: 'board-height-inp'
         },
         layers: {
             value: 3,
-            default: 3,
+            default: [1, 3, 4, 5, 7],
             element: 'board-layers-inp'
         }
     },
@@ -88,6 +96,8 @@ let settings = {
     }
 }
 
+let currentPreset;
+
 let boardWidth;
 let boardHeight;
 
@@ -104,6 +114,8 @@ let openTiles = {total:0, layers:[]};
 let flags = {total: {all:0, layer:[]}, layer:[]};
 
 function setupGameVariables() {
+    currentPreset = 0;
+
     boardWidth = settings.size.width.value;
     settings.size.height.value = boardWidth; // Because custome height is not implemented yet
     boardHeight = settings.size.height.value;
@@ -423,13 +435,14 @@ function resetSetting(settingKey) {
     let setting = settings[settingKey];
 
     if (Object.hasOwn(setting, 'value')) {
-        setting.value = setting.default;
-        updateSettingHtml(setting.element, setting.default);
+        setting.value = setting.default[currentPreset];
+        updateSettingHtml(setting.element, setting.default[currentPreset]);
     } else {
         for (let subKey of Object.keys(setting)) {
             let subSetting = setting[subKey];
-            subSetting.value = subSetting.default;
-            updateSettingHtml(subSetting.element, subSetting.default);
+            let subDefValue = settingKey == 'colors' ? subSetting.default : subSetting.default[currentPreset];
+            subSetting.value = subDefValue;
+            updateSettingHtml(subSetting.element, subDefValue);
         }
     }
 
@@ -480,34 +493,41 @@ function updateSettingHtml(elementId, value) {
 }
 
 function saveSettingsToCookie() {
-    cookiefy('settings', settings, true);
+    let settingValues = {};
+
+    for (let key of Object.keys(settings)) {
+        let setting = settings[key];
+
+        if (Object.hasOwn(setting, 'value')) {
+            settingValues[key] = setting.value;
+        } 
+        else {
+            settingValues[key] = {};
+            for (let subKey of Object.keys(setting)) {
+                settingValues[key][subKey] = setting[subKey].value;
+            }
+        }
+    }
+
+    cookiefy('settings', settingValues, true);
 }
 
 function loadSettingsFromCookie() {
     let cookieSettings = getCookie('settings', true);
 
-    if (cookieSettings && keysMatch(cookieSettings, settings)) {
-        settings = cookieSettings;
-    }
-}
+    if (cookieSettings) {
+        for (let key of Object.keys(cookieSettings)) {
+            let cookieSetting = cookieSettings[key];
 
-function keysMatch(obj1, obj2) {
-    if ((typeof obj1 === 'object' && !Array.isArray(obj1)) && (typeof obj2 === 'object' && !Array.isArray(obj2))) {
-
-        const keysObj1 = Object.keys(obj1);
-        if (keysObj1.length != Object.keys(obj2).length) return false;
-
-        for (let key of keysObj1) {
-            if (!Object.hasOwn(obj2, key)) return false;
-
-            const valObj1 = obj1[key];
-            const valObj2 = obj2[key];
-
-            if (!keysMatch(valObj1, valObj2)) return false;
+            if (typeof cookieSetting === 'object' && !Array.isArray(cookieSetting)) {
+                for (let subKey of Object.keys(cookieSetting)) {
+                    settings[key][subKey].value = cookieSetting[subKey];
+                }
+            } else {
+                settings[key].value = cookieSetting;
+            }
         }
     }
-
-    return true;
 }
 
 
