@@ -588,12 +588,12 @@ function populateWithBombs() {
     let index = 0, layer = 0;
     for (let i = 0; i < bombs.all; i++) {
         index = Math.floor(Math.random() * ((boardWidth * boardHeight) - 1));
-        layer = Math.floor(Math.random() * (totalLayers - 1)) + 1;
+        layer = Math.floor(Math.random() * (totalLayers)) + 1;
 
         let maxAttempts = 100;
         while (getTileValue(layer, index) >= 100 && maxAttempts > 0) { // Ensure random location is not a bomb
             index = Math.floor(Math.random() * ((boardWidth * boardHeight) - 1));
-            layer = Math.floor(Math.random() * (totalLayers - 1)) + 1;
+            layer = Math.floor(Math.random() * totalLayers) + 1;
             maxAttempts--;
         }
 
@@ -624,13 +624,13 @@ function increaseValue(layer, x, y, value = 1) {
 
 
 function restartGame() {
-    initializeGame();
+    initializeGame(false);
     document.getElementById('game-end-dialog').close();
 }
 
 
-function initializeGame() {
-    loadSettingsFromCookie();
+function initializeGame(getSavedSettings = true) {
+    if (getSavedSettings) loadSettingsFromCookie();
     setupGameVariables();
     mirrorHtmlToSettings();
     populateWithBombs();
