@@ -9,9 +9,10 @@
     --board-ground-tiling-contrast: 20%;
     --number-weight: bold;
     --grass-text-color: #ecf0f1;
+    --grass-flag-color: #ea101b;
     --ground-text-color: #1a191b;
+    --ground-flag-color: #ad0009;
     --tiny-info-opacity: .8;
-    --flag-color: #ea101b;
 
     --body-padding: 2rem;
     --board-width: min(100vw - var(--body-padding) * 2, 100vh - (var(--body-padding) * 2 + 12rem));
@@ -67,7 +68,7 @@ body {
 .flag { /* Flag icon */
     width: 70%;
     height: 70%;
-    background-color: var(--flag-color);
+    background-color: var(--default-color);
     mask-image: url(/icons/flag.svg);
     mask-size: contain;
     mask-repeat: no-repeat;
@@ -141,6 +142,9 @@ body {
             .mine {
                 background-color: var(--grass-text-color);
             }
+            .flag {
+                background-color: var(--grass-flag-color);
+            }
         }
 
         &.ground {
@@ -156,6 +160,9 @@ body {
 
             .mine {
                 background-color: var(--ground-text-color);
+            }
+            .flag {
+                background-color: var(--ground-flag-color);
             }
         }
     }
@@ -311,6 +318,17 @@ h2 {
         height: 75%;
         background-color: var(--preview-color);
         opacity: var(--preview-opacity);
+    }
+
+    .color-flag-preview {
+        --preview-color: black;
+        background-color: var(--preview-color);
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        z-index: 2;
     }
 
     div:has(> input) {
@@ -504,7 +522,7 @@ button {
         display: none;
 
         &:checked + label {
-            background-color: var(--flag-color);
+            background-color: var(--grass-flag-color);
             cursor: default;
 
             > img {

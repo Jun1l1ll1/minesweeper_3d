@@ -54,9 +54,14 @@
                 <button class="settings-reset-btn" onclick="resetSetting('colors')"><i>Reset</i></button>
                 <div class="settings-color-cont">
                     <div class="settings-color-item">
+                        <div class="sub-color-inp">
+                            <div><input for-css="--grass-flag-color" type="color" name="flag-color-grass-inp" id="flag-color-grass-inp" onchange="updateSetting(this.value, 'colors', 'grassFlag')" /></div>
+                        </div>
+
                         <div class="color-inp">
                             <label for="color-grass-inp" style="--settings-item-label-color: var(--grass-text-color);">Grass</label>
                             <div><input for-css="--board-grass-color" type="color" name="color-grass-inp" id="color-grass-inp" onchange="updateSetting(this.value, 'colors', 'grass')" /></div>
+                            <label for="flag-color-grass-inp" class="color-flag-preview flag" style="--preview-color: var(--grass-flag-color);"></label>
                             <div class="color-tileing-preview" style="--preview-color: var(--board-grass-tiling-color); --preview-opacity: var(--board-grass-tiling-contrast);"></div>
                         </div>
 
@@ -72,9 +77,14 @@
                     </div>
 
                     <div class="settings-color-item">
+                        <div class="sub-color-inp">
+                            <div><input for-css="--ground-flag-color" type="color" name="flag-color-ground-inp" id="flag-color-ground-inp" onchange="updateSetting(this.value, 'colors', 'groundFlag')" /></div>
+                        </div>
+
                         <div class="color-inp">
                             <label for="color-ground-inp" style="--settings-item-label-color: var(--ground-text-color);">Ground</label>
                             <div><input for-css="--board-ground-color" type="color" name="color-ground-inp" id="color-ground-inp" onchange="updateSetting(this.value, 'colors', 'ground')" /></div>
+                            <label for="flag-color-ground-inp" class="color-flag-preview flag" style="--preview-color: var(--ground-flag-color);"></label>
                             <div class="color-tileing-preview" style="--preview-color: var(--board-ground-tiling-color); --preview-opacity: var(--board-ground-tiling-contrast);"></div>
                         </div>
 
@@ -85,13 +95,6 @@
                         <div class="sub-color-inp">
                             <div id="tileing-color-ground-inp-cont"><input for-css="--board-ground-tiling-color" type="color" name="tileing-color-ground-inp" id="tileing-color-ground-inp" onchange="updateSetting(this.value, 'colors', 'groundTileing')" /></div>
                             <input for-css="--board-ground-tiling-contrast" type="number" min="0" max="100" name="tileing-opacity-ground-inp" id="tileing-opacity-ground-inp" onchange="updateSetting(this.value, 'colors', 'groundTileingOpacity')">
-                        </div>
-                    </div>
-                    
-                    <div class="settings-color-item">
-                        <div class="color-inp">
-                            <label for="color-flag-inp" style="--settings-item-label-color: var(--default-color);">Flag</label>
-                            <div><input for-css="--flag-color" type="color" name="color-flag-inp" id="color-flag-inp" onchange="updateSetting(this.value, 'colors', 'flag')" /></div>
                         </div>
                     </div>
                 </div>
@@ -110,7 +113,7 @@
 
     <header>
         <div class="flex" style="--direction: row; --gap: 1rem;">
-            <h2 id="clock" class="default-box digital">00:00:00</h2>
+            <h2 id="lives" class="default-box digital">3/3</h2>
             <h2 id="mines-left" class="default-box digital">78 (11)</h2> <!-- [total mines] ([mines on this level]) -->
         </div>
 

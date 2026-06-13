@@ -34,11 +34,6 @@ let settings = {
         }
     },
     colors: {
-        flag: {
-            value: '#ea101b',
-            default: '#ea101b',
-            element: 'color-flag-inp'
-        },
         grass: {
             value: '#306d53',
             default: '#306d53',
@@ -59,6 +54,11 @@ let settings = {
             default: '#ecf0f1',
             element: 'sub-color-grass-inp'
         },
+        grassFlag: {
+            value: '#ea101b',
+            default: '#ea101b',
+            element: 'flag-color-grass-inp'
+        },
         ground: {
             value: '#c9ad80',
             default: '#c9ad80',
@@ -78,6 +78,11 @@ let settings = {
             value: '#1a191b',
             default: '#1a191b',
             element: 'sub-color-ground-inp'
+        },
+        groundFlag: {
+            value: '#ad0009',
+            default: '#ad0009',
+            element: 'flag-color-ground-inp'
         }
     }
 }
@@ -499,8 +504,8 @@ function setupBoard() {
     for (let i = 0; i < settings.size.width.value * settings.size.width.value; i++) {
         tileOpened = isTileOpen(currentLayer, i);
         tileContent = tileOpened || isTileFlagged(currentLayer, i) ? getTileContent(i) : '';
-        upperTileContent = isTileOpen(currentLayer + 1, i) || isTileFlagged(currentLayer + 1, i) ? getTileContent(i, currentLayer + 1, '-') : '?';
-        lowerTileContent = isTileOpen(currentLayer - 1, i) || isTileFlagged(currentLayer - 1, i) ? getTileContent(i, currentLayer - 1, '-') : '?';
+        upperTileContent = isTileOpen(currentLayer + 1, i) || isTileFlagged(currentLayer + 1, i) ? getTileContent(i, currentLayer + 1, '-') : '??';
+        lowerTileContent = isTileOpen(currentLayer - 1, i) || isTileFlagged(currentLayer - 1, i) ? getTileContent(i, currentLayer - 1, '-') : '??';
 
         html += `
             <button class="tile ${tileOpened ? 'ground' : 'grass'}" onClick="handleTileClick(${i})" oncontextmenu="handleTileRightClick(${i}, event)">
