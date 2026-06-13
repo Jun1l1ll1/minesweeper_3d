@@ -115,7 +115,7 @@ function setupGameVariables() {
     currentLives = settings.difficulty.lives.value;
 
     bombs = {
-        all: settings.difficulty.bombAmount.value,
+        all: settings.difficulty.bombAmount.value <= boardWidth*boardHeight*totalLayers ? settings.difficulty.bombAmount.value : boardWidth*boardHeight*totalLayers,
         layer: Array.from({ length: totalLayers }, () => 0),
         revealed: {
             all: 0,
@@ -580,9 +580,12 @@ function populateWithBombs() {
     for (let i = 0; i < bombs.all; i++) {
         index = Math.floor(Math.random() * ((boardWidth * boardHeight) - 1));
         layer = Math.floor(Math.random() * (totalLayers - 1)) + 1;
-        while (getTileValue(layer, index) >= 100) { // Ensure random location is not a bomb
+        
+        let maxAttempts = 100;
+        while (getTileValue(layer, index) >= 100 && maxAttempts > 0) { // Ensure random location is not a bomb
             index = Math.floor(Math.random() * ((boardWidth * boardHeight) - 1));
             layer = Math.floor(Math.random() * (totalLayers - 1)) + 1;
+            maxAttempts--;
         }
 
         const { x, y } = indexToCoordinates(index);
