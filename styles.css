@@ -16,7 +16,7 @@
     --tiny-info-opacity: .8;
 
     --body-padding: 2rem;
-    --board-width: min(100vw - var(--body-padding) * 2, 100vh - (var(--body-padding) * 2 + 12rem));
+    --board-width: min(100vw - var(--body-padding) * 2, calc(var(--vh, 1vh) * 100) - (var(--body-padding) * 2 + 12rem));
 
     color-scheme: dark;
     color: var(--default-color);
@@ -29,13 +29,17 @@
     box-sizing: border-box;
 }
 
-html, body {
-    min-height: 100%;
+html {
+    height: 100%;
+    overflow-x: hidden;
 }
 
 body {
     margin: 0;
-    min-height: calc(var(--vh, 1vh) * 100);
+    width: 100%;
+    height: calc(var(--vh, 1vh) * 100);
+    max-height: calc(var(--vh, 1vh) * 100);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -222,8 +226,8 @@ dialog {
 }
 
 .settings-container {
-    overflow-y: scroll;
-    max-height: calc(100vh - (var(--body-padding) - 1.5rem) - 7.5rem);
+    overflow-y: auto;
+    max-height: calc(calc(var(--vh, 1vh) * 100) - (var(--body-padding) - 1.5rem) - 7.5rem);
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(1, 1fr);

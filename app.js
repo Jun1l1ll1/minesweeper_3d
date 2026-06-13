@@ -7,8 +7,10 @@ const statusText = document.getElementById('pwa-status');
 
 let deferredPrompt;
 const updateViewportHeight = () => {
-    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', `${height * 0.01}px`);
 };
+const scheduleViewportUpdate = () => window.requestAnimationFrame(updateViewportHeight);
 
 // let boardScale = 1;
 // let initialPinchDistance = null;
@@ -83,6 +85,11 @@ window.addEventListener('load', () => {
 window.addEventListener('resize', updateViewportHeight);
 window.addEventListener('online', updateStatus);
 window.addEventListener('offline', updateStatus);
+
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateViewportHeight);
+    window.visualViewport.addEventListener('scroll', updateViewportHeight);
+}
 
 
 // Listen for the install prompt event to show a custom install UI
