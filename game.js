@@ -420,6 +420,14 @@ function isTileBomb(layer, index) {
     return getTileValue(layer, index) >= 100;
 }
 
+function usePreset(presetName) {
+    currentPreset = presets[presetName];
+    resetSetting('difficulty');
+    resetSetting('size');
+    
+    mirrorHtmlToSettings();
+}
+
 function updateSetting(newValue, settingKey, subSettingKey = null) {
     
     let setting = settings[settingKey];
